@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Prático de Tomada de Decisão</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 3px solid #000;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+        
+        nav {
+            background: #ffffff;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #2c2c2c;
+            color: #2c2c2c;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            background: #2c2c2c;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2c2c2c;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+        
+        .highlight {
+            background: #2c2c2c;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .matrix-cell {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .matrix-cell:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .good { background: #e8f5e9; border-color: #4caf50; }
+        .bad { background: #ffebee; border-color: #f44336; }
+        .neutral { background: #fff9c4; border-color: #fbc02d; }
+        
+        .checklist {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .checklist-item:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+        
+        .checkbox {
+            width: 25px;
+            height: 25px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        
+        .tool-card {
+            background: white;
+            border: 2px solid #2c2c2c;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .steps {
+            counter-reset: step;
+            margin: 20px 0;
+        }
+        
+        .step {
+            position: relative;
+            padding-left: 50px;
+            margin: 20px 0;
+            counter-increment: step;
+        }
+        
+        .step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            background: #2c2c2c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .warning {
+            background: #fff9c4;
+            border-left: 4px solid #fbc02d;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .danger {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+        
+        button:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+        }
+        
+        .quote {
+            font-style: italic;
+            font-size: 1.1em;
+            color: #666;
+            border-left: 3px solid #2c2c2c;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .emoji {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+        
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #2c2c2c;
+            box-shadow: 0 0 0 3px rgba(44, 44, 44, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .content { padding: 20px; }
+            .matrix { grid-template-columns: 1fr; }
+        }
+        
+        .qualitative-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .criterion-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .criterion-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c2c2c;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        input[type="range"] {
+            flex: 1;
+        }
+        
+        .score-display {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .remove-criterion-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .remove-criterion-btn:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎲 Guia Prático de Tomada de Decisão</h1>
+            <p class="subtitle">Ferramenta criada por @nathanaelboesso</p>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="showSection('home')">Início</button>
+            <button class="nav-btn" onclick="showSection('biases')">Vieses Fatais</button>
+            <button class="nav-btn" onclick="showSection('framework')">Framework 6 Passos</button>
+            <button class="nav-btn" onclick="showSection('tools')">Ferramentas</button>
+            <button class="nav-btn" onclick="showSection('calculator')">Calculadora Financeira</button>
+            <button class="nav-btn" onclick="showSection('qualitative')">Calculadora Qualitativa</button>
+            <button class="nav-btn" onclick="showSection('checklist')">Checklist Final</button>
+        </nav>
+        
+        <div class="content">
+            <!-- SEÇÃO: HOME -->
+            <div id="home" class="section active">
+                <h2>Bem-vindo ao Guia de Tomada de Decisão</h2>
+                
+                <div class="card">
+                    <h3>🎯 Objetivo</h3>
+                    <p>Este guia é uma ferramenta prática para ajudá-lo a tomar decisões melhores, baseadas em pensamento probabilístico e estruturado.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>📋 O que você encontrará aqui:</h3>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li><strong>Vieses Fatais:</strong> Os principais erros mentais que sabotam decisões</li>
+                        <li><strong>Framework 6 Passos:</strong> Método estruturado para decisões importantes</li>
+                        <li><strong>Ferramentas Práticas:</strong> Técnicas específicas (premortem, backcasting, etc.)</li>
+                        <li><strong>Calculadoras:</strong> Ferramentas quantitativas e qualitativas para análise</li>
+                        <li><strong>Checklist Final:</strong> Validação antes de decidir</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight">
+                    <h3>💡 Princípio Fundamental</h3>
+                    <p><strong>A vida é poker, não xadrez.</strong> Você está decidindo sob incerteza. Uma boa decisão pode ter um resultado ruim (e vice-versa). O objetivo não é acertar sempre, mas melhorar a qualidade do processo de decisão.</p>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO: VIESES -->
+            <div id="biases" class="section">
+                <h2>⚠️ Vieses Fatais que Arruínam Decisões</h2>
+                
+                <div class="tool-card">
+                    <h3>1. Hindsight Bias (Viés da Retrospectiva)</h3>
+                    <p><strong>O que é:</strong> "Eu sabia que isso ia acontecer!"</p>
+                    <p><strong>Por que é perigoso:</strong> Faz você julgar decisões passadas com informações que só existem DEPOIS do resultado.</p>
+                    <p><strong>Como evitar:</strong> Separe o que você sabia ANTES de decidir do que descobriu DEPOIS.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>2. Resulting (Julgar pela Consequência)</h3>
+                    <p><strong>O que é:</strong> Avaliar a qualidade de uma decisão apenas pelo resultado.</p>
+                    <p><strong>Exemplo:</strong> "Dirigi bêbado e cheguei em casa = boa decisão" ❌</p>
+                    <p><strong>Como evitar:</strong> Julgue o processo, não o resultado. Uma decisão ruim pode dar sorte.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>3. Confirmation Bias (Viés de Confirmação)</h3>
+                    <p><strong>O que é:</strong> Buscar apenas informações que confirmam o que você já acredita.</p>
+                    <p><strong>Como evitar:</strong> Busque ativamente informações CONTRA sua hipótese inicial.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>4. Overconfidence (Excesso de Confiança)</h3>
+                    <p><strong>O que é:</strong> Superestimar suas chances de sucesso e subestimar os riscos.</p>
+                    <p><strong>Como evitar:</strong> Consulte a taxa base (dados históricos) e faça um premortem.</p>
+                </div>
+                
+                <div class="matrix">
+                    <div class="matrix-cell good">
+                        <h4>Boa Decisão</h4>
+                        <h4>Bom Resultado</h4>
+                        <p>✅ Aprenda e repita</p>
+                    </div>
+                    <div class="matrix-cell neutral">
+                        <h4>Boa Decisão</h4>
+                        <h4>Resultado Ruim</h4>
+                        <p>⚠️ Má sorte. Processo correto!</p>
+                    </div>
+                    <div class="matrix-cell neutral">
+                        <h4>Decisão Ruim</h4>
+                        <h4>Bom Resultado</h4>
+                        <p>⚠️ Boa sorte. Não repita!</p>
+                    </div>
+                    <div class="matrix-cell bad">
+                        <h4>Decisão Ruim</h4>
+                        <h4>Resultado Ruim</h4>
+                        <p>❌ Aprenda e corrija</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO: FRAMEWORK 6 PASSOS -->
+            <div id="framework" class="section">
+                <h2>🎯 Framework de 6 Passos para Decisões</h2>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="card">
+                            <h3>Passo 1: Identifique os Resultados Possíveis</h3>
+                            <p>Liste todos os cenários realistas que podem acontecer.</p>
+                            <div class="warning">
+                                <strong>⚠️ Cuidado:</strong> Não seja binário ("vai dar certo ou errado"). A vida tem múltiplos resultados possíveis.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="card">
+                            <h3>Passo 2: Identifique Preferências e Payoffs</h3>
+                            <p>Para cada resultado, determine:</p>
+                            <ul style="margin-left: 20px;">
+                                <li>Qual o upside (ganho potencial)?</li>
+                                <li>Qual o downside (perda potencial)?</li>
+                                <li>O upside compensa o downside?</li>
+                            </ul>
+                            
+                            <div style="margin-top: 20px;">
+                                <h4>💰 Análise Quantitativa (Financeira)</h4>
+                                <div class="grid-2">
+                                    <div>
+                                        <label>Upside Financeiro ($):</label>
+                                        <input type="number" id="upside-quant" placeholder="Ex: 100000">
+                                    </div>
+                                    <div>
+                                        <label>Downside Financeiro ($):</label>
+                                        <input type="number" id="downside-quant" placeholder="Ex: 50000">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <h4>🎯 Análise Qualitativa (Não-Financeira)</h4>
+                                <div class="grid-2">
+                                    <div>
+                                        <label>Upside Qualitativo:</label>
+                                        <textarea id="upside-qual" placeholder="Ex: Crescimento profissional, aprendizado de novas habilidades, networking..."></textarea>
+                                    </div>
+                                    <div>
+                                        <label>Downside Qualitativo:</label>
+                                        <textarea id="downside-qual" placeholder="Ex: Stress adicional, menos tempo com família, risco de reputação..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="card">
+                            <h3>Passo 3: Estime as Probabilidades</h3>
+                            <p>Atribua uma probabilidade realista para cada resultado.</p>
+                            <div class="success">
+                                <strong>✅ Dica:</strong> Use a taxa base! Olhe dados históricos similares. "Quanto % de startups similares têm sucesso?"
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="card">
+                            <h3>Passo 4: Avalie a Opção (Quantitativa + Qualitativa)</h3>
+                            <p><strong>Análise Quantitativa:</strong> Calcule o valor esperado usando a Calculadora Financeira</p>
+                            <p style="margin-top: 10px;"><strong>Análise Qualitativa:</strong> Use a Calculadora Qualitativa para avaliar aspectos não-financeiros como satisfação, alinhamento com valores, impacto na saúde, etc.</p>
+                            <div class="highlight">
+                                <p><strong>Combinando ambas:</strong> Uma decisão ideal tem valor esperado financeiro positivo E alta pontuação qualitativa nos critérios que importam para você.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="card">
+                            <h3>Passo 5: Repita para Outras Opções</h3>
+                            <p>Compare múltiplas alternativas usando o mesmo processo.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="card">
+                            <h3>Passo 6: Faça a Jogada (Decida)</h3>
+                            <p>Escolha a opção com melhor valor esperado combinado (quantitativo + qualitativo)</p>
+                            <div class="warning">
+                                <strong>⚠️ Lembre-se:</strong> O resultado não determina se a decisão foi boa. Avalie o processo, não o resultado.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO: FERRAMENTAS -->
+            <div id="tools" class="section">
+                <h2>🛠️ Ferramentas Práticas</h2>
+                
+                <div class="tool-card">
+                    <h3>💀 PREMORTEM (Antes da Decisão)</h3>
+                    <p><strong>O que é:</strong> Imagine que você tomou a decisão e ela DEU ERRADO. Por quê?</p>
+                    <div class="steps">
+                        <div class="step">
+                            <strong>Reúna a equipe (ou faça sozinho)</strong>
+                        </div>
+                        <div class="step">
+                            <strong>"Imagine que é 1 ano no futuro e o projeto fracassou. Por quê?"</strong>
+                        </div>
+                        <div class="step">
+                            <strong>Liste todas as razões possíveis para o fracasso</strong>
+                        </div>
+                        <div class="step">
+                            <strong>Prepare-se para cada uma</strong>
+                            <textarea id="premortem-prep" placeholder="Descreva como você vai se preparar para cada risco identificado..."></textarea>
+                        </div>
+                    </div>
+                    <div class="success">
+                        <strong>Por que funciona:</strong> Força você a pensar em riscos que o otimismo esconde.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>🎯 BACKCASTING (Planejamento Reverso)</h3>
+                    <p><strong>O que é:</strong> Comece do futuro desejado e trabalhe DE TRÁS PARA FRENTE.</p>
+                    <p><strong>Como fazer:</strong></p>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Imagine que você alcançou o objetivo. Como é esse futuro?</li>
+                        <li>Quais foram os marcos importantes para chegar lá?</li>
+                        <li>Trabalhe de trás para frente até o presente</li>
+                    </ol>
+                    <div style="margin-top: 20px;">
+                        <label><strong>Descreva seu cenário futuro ideal e os passos reversos:</strong></label>
+                        <textarea id="backcast-scenario" placeholder="Ex: Em 3 anos, minha empresa fatura $5M/ano...
+
+Marco 4 (Ano 3): Atingir $5M em receita anual
+Marco 3 (Ano 2): Alcançar 100 clientes pagantes
+Marco 2 (Ano 1): Lançar produto v2.0 com feedback
+Marco 1 (Mês 6): Validar MVP com primeiros 10 clientes
+Hoje: ..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>📊 TAXA BASE (Base Rate)</h3>
+                    <p><strong>O que é:</strong> Dados estatísticos gerais sobre situações similares.</p>
+                    <p><strong>Exemplo:</strong> "70% das startups fracassam nos primeiros 5 anos"</p>
+                    <div class="warning">
+                        <strong>⚠️ Crucial:</strong> Não ignore a taxa base! Você provavelmente não é tão especial quanto pensa.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>📝 Contratos de Pré-Compromisso</h3>
+                    <p><strong>O que é:</strong> Decisões que você toma ANTES da emoção do momento.</p>
+                    <p><strong>Exemplos:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>"Se o projeto não atingir X em 6 meses, vou encerrar"</li>
+                        <li>"Se a ação cair 20%, vou vender automaticamente"</li>
+                        <li>"Não vou responder emails emocionais na hora, vou esperar 24h"</li>
+                    </ul>
+                    <div style="margin-top: 20px;">
+                        <label><strong>Defina seus contratos de pré-compromisso:</strong></label>
+                        <textarea id="precommit-contracts" placeholder="Liste as regras e gatilhos que você vai seguir automaticamente...
+
+Ex: 
+- Se investimento não retornar 10% em 1 ano → vender
+- Se projeto atrasar mais de 3 meses → reavaliar viabilidade
+- Antes de decisões acima de $10k → dormir sobre o assunto"></textarea>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>🤝 Busque Feedback sem Contaminar</h3>
+                    <p><strong>Como:</strong></p>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Não revele sua opinião primeiro</li>
+                        <li>Faça perguntas abertas: "O que você acha sobre X?"</li>
+                        <li>Incentive discordância: "Por que isso poderia dar errado?"</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO: CALCULADORA FINANCEIRA -->
+            <div id="calculator" class="section">
+                <h2>💰 Calculadora de Valor Esperado (Financeira)</h2>
+                
+                <div class="card">
+                    <h3>📊 Como funciona</h3>
+                    <p><strong>Valor Esperado = Σ (Probabilidade × Valor de cada cenário)</strong></p>
+                    <p>Exemplo: Se há 50% de chance de ganhar $100 e 50% de perder $50:</p>
+                    <p>VE = (0.5 × $100) + (0.5 × -$50) = $50 - $25 = $25</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>Cenários da Decisão</h3>
+                    
+                    <div class="grid-2">
+                        <div class="card">
+                            <h4>Cenário 1 (Melhor Caso)</h4>
+                            <div>
+                                <label>Descrição:</label>
+                                <input type="text" id="desc1" placeholder="Ex: Grande sucesso">
+                            </div>
+                            <div>
+                                <label>Probabilidade (%):</label>
+                                <input type="number" id="prob1" min="0" max="100" placeholder="20">
+                            </div>
+                            <div>
+                                <label>Valor/Impacto ($):</label>
+                                <input type="number" id="val1" placeholder="500000">
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>Cenário 2 (Caso Base)</h4>
+                            <div>
+                                <label>Descrição:</label>
+                                <input type="text" id="desc2" placeholder="Ex: Sucesso moderado">
+                            </div>
+                            <div>
+                                <label>Probabilidade (%):</label>
+                                <input type="number" id="prob2" min="0" max="100" placeholder="55">
+                            </div>
+                            <div>
+                                <label>Valor/Impacto ($):</label>
+                                <input type="number" id="val2" placeholder="200000">
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>Cenário 3 (Pior Caso)</h4>
+                            <div>
+                                <label>Descrição:</label>
+                                <input type="text" id="desc3" placeholder="Ex: Fracasso/Prejuízo">
+                            </div>
+                            <div>
+                                <label>Probabilidade (%):</label>
+                                <input type="number" id="prob3" min="0" max="100" placeholder="25">
+                            </div>
+                            <div>
+                                <label>Valor/Impacto ($):</label>
+                                <input type="number" id="val3" placeholder="-100000">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <label>Custo/Investimento Inicial ($):</label>
+                        <input type="number" id="cost" placeholder="150000">
+                    </div>
+                    
+                    <button onclick="calculateEV()">Calcular Valor Esperado</button>
+                    
+                    <div id="result" class="highlight" style="display: none; margin-top: 20px;">
+                        <h3>Resultado:</h3>
+                        <p id="ev-result" style="font-size: 1.3em; font-weight: bold;"></p>
+                        <p id="recommendation" style="margin-top: 10px;"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO: CALCULADORA QUALITATIVA -->
+            <div id="qualitative" class="section">
+                <h2>🎯 Calculadora de Impacto Qualitativo</h2>
+                
+                <div class="card">
+                    <h3>📊 Como funciona</h3>
+                    <p>Esta calculadora ajuda você a avaliar decisões baseadas em critérios não-financeiros. Você define:</p>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li><strong>Critérios:</strong> Aspectos importantes para você (ex: satisfação, saúde, crescimento)</li>
+                        <li><strong>Pesos:</strong> Importância relativa de cada critério (0-10)</li>
+                        <li><strong>Avaliação:</strong> Como cada opção se sai em cada critério (1-10)</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><strong>Pontuação Final = Σ (Peso × Avaliação) para cada critério</strong></p>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>Defina seus Critérios de Avaliação</h3>
+                    <p>Quais aspectos qualitativos importam para esta decisão?</p>
+                    
+                    <div id="criteria-container">
+                        <div class="criterion-item" data-criterion="1">
+                            <label>Critério 1:</label>
+                            <input type="text" class="criterion-name" placeholder="Ex: Satisfação Pessoal">
+                            <label>Peso (Importância: 0-10):</label>
+                            <div class="slider-container">
+                                <input type="range" class="criterion-weight" min="0" max="10" value="5">
+                                <span class="score-display weight-display">5</span>
+                            </div>
+                            <button class="remove-criterion-btn" onclick="removeCriterion(1)">🗑️ Remover Critério</button>
+                        </div>
+                        
+                        <div class="criterion-item" data-criterion="2">
+                            <label>Critério 2:</label>
+                            <input type="text" class="criterion-name" placeholder="Ex: Alinhamento com Valores">
+                            <label>Peso (Importância: 0-10):</label>
+                            <div class="slider-container">
+                                <input type="range" class="criterion-weight" min="0" max="10" value="5">
+                                <span class="score-display weight-display">5</span>
+                            </div>
+                            <button class="remove-criterion-btn" onclick="removeCriterion(2)">🗑️ Remover Critério</button>
+                        </div>
+                        
+                        <div class="criterion-item" data-criterion="3">
+                            <label>Critério 3:</label>
+                            <input type="text" class="criterion-name" placeholder="Ex: Impacto na Saúde">
+                            <label>Peso (Importância: 0-10):</label>
+                            <div class="slider-container">
+                                <input type="range" class="criterion-weight" min="0" max="10" value="5">
+                                <span class="score-display weight-display">5</span>
+                            </div>
+                            <button class="remove-criterion-btn" onclick="removeCriterion(3)">🗑️ Remover Critério</button>
+                        </div>
+                        
+                        <div class="criterion-item" data-criterion="4">
+                            <label>Critério 4:</label>
+                            <input type="text" class="criterion-name" placeholder="Ex: Crescimento Pessoal">
+                            <label>Peso (Importância: 0-10):</label>
+                            <div class="slider-container">
+                                <input type="range" class="criterion-weight" min="0" max="10" value="5">
+                                <span class="score-display weight-display">5</span>
+                            </div>
+                            <button class="remove-criterion-btn" onclick="removeCriterion(4)">🗑️ Remover Critério</button>
+                        </div>
+                        
+                        <div class="criterion-item" data-criterion="5">
+                            <label>Critério 5:</label>
+                            <input type="text" class="criterion-name" placeholder="Ex: Qualidade de Vida">
+                            <label>Peso (Importância: 0-10):</label>
+                            <div class="slider-container">
+                                <input type="range" class="criterion-weight" min="0" max="10" value="5">
+                                <span class="score-display weight-display">5</span>
+                            </div>
+                            <button class="remove-criterion-btn" onclick="removeCriterion(5)">🗑️ Remover Critério</button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="addCriterion()">+ Adicionar Critério</button>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>Opção A - Avalie cada critério</h3>
+                    <input type="text" id="option-a-name" placeholder="Nome da Opção A" style="margin-bottom: 20px;">
+                    <div id="option-a-scores"></div>
+                    <button onclick="calculateQualitative()">Calcular Pontuação</button>
+                    <div id="result-a" class="highlight" style="display: none; margin-top: 20px;">
+                        <h4>Pontuação da Opção A:</h4>
+                        <p id="score-a" style="font-size: 1.5em; font-weight: bold;"></p>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>Opção B - Avalie cada critério</h3>
+                    <input type="text" id="option-b-name" placeholder="Nome da Opção B" style="margin-bottom: 20px;">
+                    <div id="option-b-scores"></div>
+                    <button onclick="calculateQualitative()">Calcular Pontuação</button>
+                    <div id="result-b" class="highlight" style="display: none; margin-top: 20px;">
+                        <h4>Pontuação da Opção B:</h4>
+                        <p id="score-b" style="font-size: 1.5em; font-weight: bold;"></p>
+                    </div>
+                </div>
+                
+                <div id="comparison" class="card" style="display: none; margin-top: 20px;">
+                    <h3>📊 Comparação Final</h3>
+                    <div id="comparison-result"></div>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO: CHECKLIST FINAL -->
+            <div id="checklist" class="section">
+                <h2>✅ Checklist Final de Decisão</h2>
+                
+                <div class="card">
+                    <h3>Antes de Decidir:</h3>
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Identifiquei os resultados possíveis realistas?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Estimei a probabilidade de cada um?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>O upside compensa o downside (quantitativo E qualitativo)?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Consultei a taxa base (estatística geral)?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Posso desfazer essa decisão depois?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Isso importará em 1 ano?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Separei o que sei do que preciso descobrir?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Fiz um premortem (o que pode dar errado)?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Busquei opinião sem contaminar com a minha?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Avaliei tanto aspectos financeiros quanto qualitativos?</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Depois do Resultado:</h3>
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Quais outros resultados poderiam ter acontecido?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>O que eu sabia ANTES vs. o que descobri DEPOIS?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Qual foi o papel da sorte nesse resultado?</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Estou julgando a decisão ou o resultado?</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="danger">
+                    <h3>⚠️ ERROS FATAIS A EVITAR:</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>❌ Julgar decisões apenas pelos resultados</li>
+                        <li>❌ Achar que "deveria ter sabido" depois do fato</li>
+                        <li>❌ Ignorar taxas base (estatísticas gerais)</li>
+                        <li>❌ Não registrar o que você sabia antes de decidir</li>
+                        <li>❌ Contaminar o feedback dos outros com sua opinião</li>
+                        <li>❌ Perseguir a certeza impossível</li>
+                        <li>❌ Não preparar para quando as coisas derem errado</li>
+                        <li>❌ Focar apenas em aspectos financeiros ignorando fatores qualitativos</li>
+                    </ul>
+                </div>
+                
+                <div class="quote" style="margin-top: 30px;">
+                    "Você tem controle sobre apenas uma coisa que determina como sua vida acontece: 
+                    a qualidade das suas decisões. Torne-as melhores." - Annie Duke
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let criterionCount = 5;
+        
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (sectionId === 'qualitative') {
+                updateQualitativeScores();
+            }
+        }
+        
+        function calculateEV() {
+            const prob1 = parseFloat(document.getElementById('prob1').value) || 0;
+            const val1 = parseFloat(document.getElementById('val1').value) || 0;
+            
+            const prob2 = parseFloat(document.getElementById('prob2').value) || 0;
+            const val2 = parseFloat(document.getElementById('val2').value) || 0;
+            
+            const prob3 = parseFloat(document.getElementById('prob3').value) || 0;
+            const val3 = parseFloat(document.getElementById('val3').value) || 0;
+            
+            const cost = parseFloat(document.getElementById('cost').value) || 0;
+            
+            const totalProb = prob1 + prob2 + prob3;
+            if (Math.abs(totalProb - 100) > 1) {
+                alert('As probabilidades devem somar 100%! Atualmente somam: ' + totalProb + '%');
+                return;
+            }
+            
+            const ev = (prob1/100 * val1) + (prob2/100 * val2) + (prob3/100 * val3);
+            const netEV = ev - cost;
+            
+            const resultDiv = document.getElementById('result');
+            const evResult = document.getElementById('ev-result');
+            const recommendation = document.getElementById('recommendation');
+            
+            resultDiv.style.display = 'block';
+            
+            evResult.textContent = `Valor Esperado: $${ev.toLocaleString('pt-BR')}
+                                    Valor Líquido: $${netEV.toLocaleString('pt-BR')}`;
+            
+            if (netEV > 0) {
+                recommendation.textContent = '✅ Decisão tem valor esperado POSITIVO. Vale a pena considerar!';
+                resultDiv.style.background = '#2c2c2c';
+            } else {
+                recommendation.textContent = '❌ Decisão tem valor esperado NEGATIVO. Reconsidere ou busque alternativas.';
+                resultDiv.style.background = '#f44336';
+            }
+        }
+        
+        // Qualitative Calculator Functions
+        function addCriterion() {
+            criterionCount++;
+            const container = document.getElementById('criteria-container');
+            const newCriterion = document.createElement('div');
+            newCriterion.className = 'criterion-item';
+            newCriterion.setAttribute('data-criterion', criterionCount);
+            newCriterion.innerHTML = `
+                <label>Critério ${criterionCount}:</label>
+                <input type="text" class="criterion-name" placeholder="Nome do critério">
+                <label>Peso (Importância: 0-10):</label>
+                <div class="slider-container">
+                    <input type="range" class="criterion-weight" min="0" max="10" value="5">
+                    <span class="score-display weight-display">5</span>
+                </div>
+                <button class="remove-criterion-btn" onclick="removeCriterion(${criterionCount})">🗑️ Remover Critério</button>
+            `;
+            container.appendChild(newCriterion);
+            updateQualitativeScores();
+            setupSliderListeners();
+        }
+        
+        function removeCriterion(criterionId) {
+            const criteria = document.querySelectorAll('.criterion-item[data-criterion]');
+            
+            // Impede remover se só tiver 1 critério
+            if (criteria.length <= 1) {
+                alert('Você precisa ter pelo menos 1 critério!');
+                return;
+            }
+            
+            const criterionToRemove = document.querySelector(`.criterion-item[data-criterion="${criterionId}"]`);
+            if (criterionToRemove) {
+                criterionToRemove.remove();
+                updateQualitativeScores();
+            }
+        }
+        
+        function updateQualitativeScores() {
+            const criteria = document.querySelectorAll('.criterion-item[data-criterion]');
+            const optionAContainer = document.getElementById('option-a-scores');
+            const optionBContainer = document.getElementById('option-b-scores');
+            
+            if (!optionAContainer || !optionBContainer) return;
+            
+            optionAContainer.innerHTML = '';
+            optionBContainer.innerHTML = '';
+            
+            criteria.forEach((criterion, index) => {
+                const nameElement = criterion.querySelector('.criterion-name');
+                const name = nameElement ? (nameElement.value || `Critério ${index + 1}`) : `Critério ${index + 1}`;
+                
+                const scoreItemA = document.createElement('div');
+                scoreItemA.className = 'criterion-item';
+                scoreItemA.innerHTML = `
+                    <label>${name} (Avaliação: 1-10):</label>
+                    <div class="slider-container">
+                        <input type="range" class="option-a-score" data-criterion="${index}" min="1" max="10" value="5">
+                        <span class="score-display score-a-display-${index}">5</span>
+                    </div>
+                `;
+                optionAContainer.appendChild(scoreItemA);
+                
+                const scoreItemB = document.createElement('div');
+                scoreItemB.className = 'criterion-item';
+                scoreItemB.innerHTML = `
+                    <label>${name} (Avaliação: 1-10):</label>
+                    <div class="slider-container">
+                        <input type="range" class="option-b-score" data-criterion="${index}" min="1" max="10" value="5">
+                        <span class="score-display score-b-display-${index}">5</span>
+                    </div>
+                `;
+                optionBContainer.appendChild(scoreItemB);
+                
+                // Adiciona listeners imediatamente após criar os elementos
+                const sliderA = scoreItemA.querySelector('.option-a-score');
+                const displayA = scoreItemA.querySelector(`.score-a-display-${index}`);
+                if (sliderA && displayA) {
+                    sliderA.addEventListener('input', function() {
+                        displayA.textContent = this.value;
+                    });
+                }
+                
+                const sliderB = scoreItemB.querySelector('.option-b-score');
+                const displayB = scoreItemB.querySelector(`.score-b-display-${index}`);
+                if (sliderB && displayB) {
+                    sliderB.addEventListener('input', function() {
+                        displayB.textContent = this.value;
+                    });
+                }
+            });
+        }
+        
+        function setupSliderListeners() {
+            // Adiciona listeners apenas para os pesos dos critérios
+            document.querySelectorAll('.criterion-weight').forEach(slider => {
+                // Remove listener antigo se existir para evitar duplicação
+                slider.removeEventListener('input', updateWeightDisplay);
+                slider.addEventListener('input', updateWeightDisplay);
+            });
+            
+            // Adiciona listeners para atualizar quando o nome do critério mudar
+            document.querySelectorAll('.criterion-name').forEach(input => {
+                // Remove listener antigo se existir para evitar duplicação
+                input.removeEventListener('change', updateQualitativeScores);
+                input.addEventListener('change', updateQualitativeScores);
+            });
+        }
+        
+        function updateWeightDisplay(event) {
+            const display = event.target.parentElement.querySelector('.weight-display');
+            if (display) {
+                display.textContent = event.target.value;
+            }
+        }
+        
+        function calculateQualitative() {
+            const criteria = document.querySelectorAll('.criterion-item[data-criterion]');
+            
+            // Verificação inicial
+            if (criteria.length === 0) {
+                alert('Adicione pelo menos um critério antes de calcular!');
+                return;
+            }
+            
+            let totalScoreA = 0;
+            let totalScoreB = 0;
+            let totalWeight = 0;
+            
+            criteria.forEach((criterion, index) => {
+                const weightElement = criterion.querySelector('.criterion-weight');
+                if (!weightElement) return; // Pula se não encontrar o elemento
+                
+                const weight = parseFloat(weightElement.value) || 0;
+                const scoreASlider = document.querySelector(`.option-a-score[data-criterion="${index}"]`);
+                const scoreBSlider = document.querySelector(`.option-b-score[data-criterion="${index}"]`);
+                
+                if (scoreASlider && scoreBSlider) {
+                    const scoreA = parseFloat(scoreASlider.value) || 0;
+                    const scoreB = parseFloat(scoreBSlider.value) || 0;
+                    
+                    totalScoreA += weight * scoreA;
+                    totalScoreB += weight * scoreB;
+                    totalWeight += weight;
+                }
+            });
+            
+            // Verificação de peso total
+            if (totalWeight === 0) {
+                alert('Defina pesos maiores que zero para os critérios!');
+                return;
+            }
+            
+            const normalizedScoreA = totalWeight > 0 ? (totalScoreA / totalWeight).toFixed(2) : 0;
+            const normalizedScoreB = totalWeight > 0 ? (totalScoreB / totalWeight).toFixed(2) : 0;
+            
+            const resultAElement = document.getElementById('result-a');
+            const resultBElement = document.getElementById('result-b');
+            const comparisonElement = document.getElementById('comparison');
+            
+            if (resultAElement) resultAElement.style.display = 'block';
+            if (resultBElement) resultBElement.style.display = 'block';
+            if (comparisonElement) comparisonElement.style.display = 'block';
+            
+            const optionANameElement = document.getElementById('option-a-name');
+            const optionBNameElement = document.getElementById('option-b-name');
+            const optionAName = optionANameElement ? (optionANameElement.value || 'Opção A') : 'Opção A';
+            const optionBName = optionBNameElement ? (optionBNameElement.value || 'Opção B') : 'Opção B';
+            
+            const scoreAElement = document.getElementById('score-a');
+            const scoreBElement = document.getElementById('score-b');
+            
+            if (scoreAElement) scoreAElement.textContent = `${normalizedScoreA} / 10`;
+            if (scoreBElement) scoreBElement.textContent = `${normalizedScoreB} / 10`;
+            
+            const comparisonDiv = document.getElementById('comparison-result');
+            if (!comparisonDiv) return;
+            
+            if (normalizedScoreA > normalizedScoreB) {
+                comparisonDiv.innerHTML = `
+                    <p style="font-size: 1.2em; font-weight: bold;">
+                        ✅ <strong>${optionAName}</strong> tem melhor pontuação qualitativa!
+                    </p>
+                    <p>Diferença: ${(normalizedScoreA - normalizedScoreB).toFixed(2)} pontos</p>
+                `;
+            } else if (normalizedScoreB > normalizedScoreA) {
+                comparisonDiv.innerHTML = `
+                    <p style="font-size: 1.2em; font-weight: bold;">
+                        ✅ <strong>${optionBName}</strong> tem melhor pontuação qualitativa!
+                    </p>
+                    <p>Diferença: ${(normalizedScoreB - normalizedScoreA).toFixed(2)} pontos</p>
+                `;
+            } else {
+                comparisonDiv.innerHTML = `
+                    <p style="font-size: 1.2em; font-weight: bold;">
+                        ⚖️ Empate! Ambas opções têm pontuações iguais.
+                    </p>
+                `;
+            }
+        }
+        
+        // Setup initial listeners
+        setupSliderListeners();
+        
+        // Checklist functionality
+        document.querySelectorAll('.checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const item = this.closest('.checklist-item');
+                if (this.checked) {
+                    item.style.background = '#e8f5e9';
+                    item.style.textDecoration = 'line-through';
+                } else {
+                    item.style.background = '#fafafa';
+                    item.style.textDecoration = 'none';
+                }
+            });
+        });
+        
+        // Tool card hover effects
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.transition = 'transform 0.3s';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
